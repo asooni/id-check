@@ -1,2 +1,3 @@
-# id-check
-# hi, I'm Anna
+### Id check
+
+Kontrollib kas isikukood heas õige.
