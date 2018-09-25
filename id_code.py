@@ -1,6 +1,7 @@
 """Check if given ID code is valid."""
 id_code = str(49211130281)
 gender_number = int(id_code[0])
+year = int(id_code[1:3])
 year_number = int(id_code[1:3])
 month_number = int(id_code[3:5])
 day_number = int(id_code[5:7])
@@ -187,7 +188,7 @@ def check_control_number(id_code):
     else:
         return False
 
-
+# korras
 def get_data_from_id(id_code):
     """
     Get possible information about the person.
@@ -197,20 +198,13 @@ def get_data_from_id(id_code):
     :param id_code: str
     :return: str
     """
-    # get_gender = "male" or "female"
-    # if id_code[0] == 1 or id_code[] == 3 or id_code[1] == 5:
-    #     get_gender = male
-    # elif id_code[1] == 2 or id_code[1] == 4 or id_code[1] == 6:
-    #     get_gender = female
+    # get gender
+    gender = get_gender(gender_number)
+    
+    # get synniaeg
+    full_year = get_full_year(gender_number, year)
 
-    gender_number = int(id_code[0])
-    year = int(id_code[1:3])
-    birth_date = str(id_code[5:7]) + "." + str(id_code[3:5]) + "." + str(get_full_year(gender_number, year))
-
-    if check_your_id(id_code) is False:
-        return "Given invalid ID code!"
-    elif id_code[1] == 1 or id_code[1] == 3 or id_code[1] == 5:
-        return "This is a" + get_gender(gender_number) + "born on" + birth_date + "."
+    return "This is a " + gender + " born on " + str(day_number) + "." + str(month_number) + '.' + str(full_year) + '.'
 
 
 def get_gender(gender_number):
