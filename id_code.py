@@ -1,20 +1,19 @@
 """Check if given ID code is valid."""
+id_code = str(49211130281)
+gender_number = int(id_code[0])
+year_number = int(id_code[1:3])
+month_number = int(id_code[3:5])
+day_number = int(id_code[5:7])
+born_order = int(id_code[7:10])
+control_number = int(id_code[-1])
 
-
-def check_your_id(id_code: str):
+def check_your_id(id_code):
     """
     Check if given ID code is valid and return the result.
 
     :param id_code: str
     :return: boolean
     """
-    gender_number = int(id_code[0])
-    year_number = int(id_code[1:3])
-    month_number = int(id_code[3:5])
-    day_number = int(id_code[5:7])
-    born_order = int(id_code[7:10])
-    control_number = int(id_code[-1])
-
     if check_gender_number(gender_number) is True and check_year_number_two_digits(year_number) is True and check_month_number(month_number) is True and check_day_number(year_number, month_number, day_number) is True and check_born_order(born_order) is True and check_control_number(control_number) is True:
         return True
     else:
@@ -22,7 +21,7 @@ def check_your_id(id_code: str):
 
 
 # korras
-def check_gender_number(gender_number: int):
+def check_gender_number(gender_number):
     """
     Check if given value is correct for gender number in ID code.
 
@@ -36,7 +35,7 @@ def check_gender_number(gender_number: int):
 
 
 # korras
-def check_year_number_two_digits(year_number: int):
+def check_year_number_two_digits(year_number):
     """
     Check if given value is correct for year number in ID code.
 
@@ -49,7 +48,8 @@ def check_year_number_two_digits(year_number: int):
         return False
 
 
-def check_month_number(month_number: int):
+# korras
+def check_month_number(month_number):
     """
     Check if given value is correct for month number in ID code.
 
@@ -63,7 +63,7 @@ def check_month_number(month_number: int):
 
 
 # korras
-def check_day_number(year_number: int, month_number: int, day_number: int):
+def check_day_number(year_number, month_number, day_number):
     """
     Check if given value is correct for day number in ID code.
 
@@ -95,7 +95,7 @@ def check_day_number(year_number: int, month_number: int, day_number: int):
 
 
 # korras
-def check_leap_year(year_number: int):
+def check_leap_year(year_number):
     """
     Check if given year is a leap year. If True, it is a leap year.
 
@@ -113,7 +113,7 @@ def check_leap_year(year_number: int):
 
 
 # korras
-def check_born_order(born_order: int):
+def check_born_order(born_order):
     """
     Check if given value is correct for born order number in ID code.
 
@@ -125,8 +125,8 @@ def check_born_order(born_order: int):
     else:
         return False
 
-
-def check_control_number(id_code: str):
+# korras
+def check_control_number(id_code):
     """
     Check if given value is correct for control number in ID code.
 
@@ -135,29 +135,60 @@ def check_control_number(id_code: str):
     :param id_code: string
     :return: boolean
     """
-# multipliers_1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1]
-# multipliers_2 = [3, 4, 5, 6, 7, 8, 9, 1, 2, 3]
-# id_code_numbers = [int(id_code[0]), int(id_code[1]), int(id_code[2]), int(id_code[3]), int(id_code[4]), int(id_code[5]), int(id_code[6]), int(id_code[7]), int(id_code[8]), int(id_code[9])]
 
-# multipliers_1. * id_code_numbers
+    # tee list idcodest
+    # id_array = map(int, id_code) # see toimib ka
+    id_array = [int(x) for x in id_code]
+    # eemalda viimane kontrollnumber
+    del id_array[-1]
 
-    control_number = id_code[-1]
+    # loopi l2bi iga kordajaga ja liida saadu kokku
+    i = 0
+    kordaja = 1
+    korrutis = 0
 
-    control_number_calc_first = ((int(id_code[0]) * 1) + (int(id_code[1]) * 2) + (int(id_code[2]) * 3) + (int(id_code[3]) * 4) + (int(id_code[4]) * 5) + (int(id_code[5]) * 6) + (int(id_code[6]) * 7) + (int(id_code[7]) * 8) + (int(id_code[8]) * 9) + (int(id_code[9]) * 1))
-    control_number_calc_second = ((int(id_code[0]) * 3) + (int(id_code[1]) * 4) + (int(id_code[2]) * 5) + (int(id_code[3]) * 6) + (int(id_code[4]) * 7) + (int(id_code[5]) * 8) + (int(id_code[6]) * 9) + (int(id_code[7]) * 1) + (int(id_code[8]) * 2) + (int(id_code[9]) * 3))
+    while i < len(id_array):
+        korrutis += id_array[i] * kordaja
+        i += 1
+        kordaja += 1
 
-    if control_number_calc_first % 11 == control_number:
+        if kordaja == 10:
+            kordaja = 1
+            continue
+
+    control_number = korrutis % 11
+
+    # if 10, siis teisiti.
+    if control_number == 10:
+        i = 0
+        kordaja = 3
+        korrutis = 0
+
+        while i < len(id_array):
+            korrutis += id_array[i] * kordaja
+            i += 1
+            kordaja += 1
+
+            if kordaja == 10:
+                kordaja = 1
+                continue
+
+    control_number = korrutis % 11
+
+    # ja kui uuesti 10 siis 0
+    if control_number == 10:
+        control_number = 0
+
+
+    # kontolli kas sai 6igesti
+    id_last_nr = [int(x) for x in id_code].pop()
+    if id_last_nr == control_number:
         return True
-    elif control_number_calc_first % 11 == 10:
-        if control_number_calc_second % 11 == control_number:
-            return True
-        elif control_number_calc_second % 11 == 10 and control_number == 0:
-            return True
     else:
         return False
 
 
-def get_data_from_id(id_code: str):
+def get_data_from_id(id_code):
     """
     Get possible information about the person.
 
@@ -202,7 +233,7 @@ def get_gender(gender_number):
 
 
 # korras
-def get_full_year(gender_number: int, year: int):
+def get_full_year(gender_number, year):
     """
     Define the 4-digit year when given person was born.
 
